@@ -15,12 +15,12 @@
                 <button id="searchBtn" onclick="searchArtist()">Search</button> 
             </div>
         </div>
-        <form id="inputs" action="/add" method="POST">
+        <div id="inputs">
             <input name="heading" id="heading" required placeholder="Artist Name" maxlength="40" type="text">
             <input name="body" id="body" required placeholder="About artist" maxlength="40" type="text">
             <input name="img" id="img" required placeholder="Image url" type="text">
-            <input id="addBtn" type="submit" value="Add">
-        </form>
+            <input id="addBtn" type="submit" value="Add" onclick="newArtist()">
+        </div>
         <div id="mainContainer">
  
         </div>

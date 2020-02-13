@@ -1,7 +1,11 @@
-function restore(artists){
+function loadArtists(){
 	fetch('/artists')
 		.then((res) => res.json())
 		.then((artists) => {
+			var container = document.getElementById("mainContainer");
+			while (container.firstChild) {
+				container.firstChild.remove();
+			}
 			for (var key in artists) {
 				createArtist(key, artists[key].heading, artists[key].body, artists[key].img);
 			}
@@ -9,7 +13,30 @@ function restore(artists){
 		.catch((err) => console.log(err));
 }
 
-restore();
+loadArtists();
+
+function newArtist(){
+	fetch('/add', {
+		method: 'post',
+		headers: {
+			"Content-type": "application/json"
+		},
+		body: JSON.stringify(
+			{
+				"heading":  document.getElementById("heading").value, 
+				"body":  document.getElementById("body").value, 
+				"img": document.getElementById("img").value
+			})
+	})
+	.then((res) => res.json())
+	.then((artist) => {
+		createArtist(artist.id, artist.heading, artist.body, artist.img)
+		document.getElementById("img").value = null;
+		document.getElementById("heading").value = null;
+		document.getElementById("body").value = null;	
+	})
+	.catch((err) => console.log(err));
+}
 
 function addArtist(event) {
 		var inputs = document.getElementById("inputs");	
@@ -77,6 +104,7 @@ function deleteArtist(element){
 		},
 		body: JSON.stringify({"id": element.parentNode.id})
 	})
+	.then(() => loadArtists())
 	.catch((err) => console.log(err));
 	element.parentNode.parentNode.removeChild(element.parentNode);
 }

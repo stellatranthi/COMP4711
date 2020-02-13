@@ -27,23 +27,23 @@ app.post('/add', (req, res) => {
     .then(rawData => {
         var artists = JSON.parse(rawData);
         var artistId = new Date().getTime();
-        artists[artistId] = req.body;
+        artists[artistId] = req.body;   
         fs.writeFile("data.json", JSON.stringify(artists), () => {});
+        console.log(JSON.stringify(artists))
+        res.json(artists[artistId])
     })
     .catch(e => console.log(e))
-    res.redirect(302, "/")
 })
 
 app.post('/delete', (req, res) => {
-    // req.body.id
     readFile("data.json")
     .then(rawData => {
         var artists = JSON.parse(rawData);
         delete artists[req.body.id];
         fs.writeFile("data.json", JSON.stringify(artists), () => {});
+        res.status(204).end();
     })
     .catch(e => console.log(e))
-    res.redirect(302, "/")
 })
 
 app.listen(8000, () => console.log('Server started at port 8000'));
