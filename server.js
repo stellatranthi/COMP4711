@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const util = require('util');
 const readFile = util.promisify(fs.readFile);
-const staticPath = express.static(path.join(__dirname,'public'));
+const filePath = express.static(path.join(__dirname,'data.json'));
 
 app.use(staticPath);
 app.use(bodyParser.urlencoded({extended: false}));
@@ -16,14 +16,14 @@ app.get("/", (req, res) => {
 })
 
 app.get("/artists", (req, res) => {
-    readFile("data.json")
+    readFile(filePath)
     .then(rawData => {
         res.send(rawData);
     })
 })
 
 app.post('/add', (req, res) => {
-    readFile("data.json", "utf8")
+    readFile(filePath, "utf8")
     .then(rawData => {
         var artists = JSON.parse(rawData);
         var artistId = new Date().getTime();
@@ -36,7 +36,7 @@ app.post('/add', (req, res) => {
 })
 
 app.post('/delete', (req, res) => {
-    readFile("data.json")
+    readFile(filePath)
     .then(rawData => {
         var artists = JSON.parse(rawData);
         delete artists[req.body.id];
@@ -45,5 +45,3 @@ app.post('/delete', (req, res) => {
     })
     .catch(e => console.log(e))
 })
-
-app.listen(8000, () => console.log('Server started at port 8000'));
